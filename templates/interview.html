@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Interview - {{ interview.job_role }}{% endblock %}
+
+{% block content %}
+<h2><i class="fa-solid fa-comments"></i> {{ interview.job_role }} Interview</h2>
+<p style="color: var(--text-secondary); margin-bottom: 24px;">Write your answer for each question in the box below.</p>
+
+<form method="POST" action="{{ url_for('interview.submit_answers', interview_id=interview.id) }}">
+    {% for answer in answers %}
+    <div class="question-box">
+        <p class="question-tag">{{ answer.question_type|upper }}</p>
+        <p class="question-text">{{ loop.index }}. {{ answer.question_text }}</p>
+        <textarea name="answer_{{ answer.id }}" rows="4" placeholder="Apna jawab yahan likhein..."></textarea>
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn" style="width:auto; padding:12px 30px;"><i class="fa-solid fa-paper-plane"></i> Submit All Answers</button>
+</form>
+{% endblock %}

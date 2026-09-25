@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block auth_content %}
+<div class="form-box">
+    <div style="text-align:center; margin-bottom: 10px;">
+        <i class="fa-solid fa-brain" style="font-size: 32px; color: var(--accent);"></i>
+    </div>
+    <h2 style="text-align:center;">Create Your Account</h2>
+    <p style="text-align:center; color: var(--text-secondary); font-size: 13px; margin-top:4px;">Start preparing for your dream job</p>
+
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        <label><i class="fa-solid fa-user"></i> Full Name</label>
+        <input type="text" name="full_name" required>
+
+        <label><i class="fa-solid fa-envelope"></i> Email</label>
+        <input type="email" name="email" required>
+
+        <label><i class="fa-solid fa-lock"></i> Password</label>
+        <input type="password" name="password" required minlength="6">
+
+        <label><i class="fa-solid fa-lock"></i> Confirm Password</label>
+        <input type="password" name="confirm_password" required minlength="6">
+
+        <button type="submit"><i class="fa-solid fa-user-plus"></i> Register</button>
+    </form>
+    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Readiness Report{% endblock %}
+
+{% block content %}
+<h2><i class="fa-solid fa-chart-line"></i> {{ interview.job_role }} - Readiness Report</h2>
+<p style="color: var(--text-secondary); margin-bottom: 20px;">Date: {{ interview.date_taken.strftime('%d %b %Y') }}</p>
+
+<div class="score-grid">
+    <div class="score-card overall">
+        <p class="score-num">{{ interview.overall_score }}</p>
+        <p class="score-label">Overall Readiness</p>
+    </div>
+    <div class="score-card">
+        <p class="score-num">{{ interview.technical_score }}</p>
+        <p class="score-label">Technical</p>
+    </div>
+    <div class="score-card">
+        <p class="score-num">{{ interview.communication_score }}</p>
+        <p class="score-label">Communication</p>
+    </div>
+    <div class="score-card">
+        <p class="score-num">{{ interview.confidence_score }}</p>
+        <p class="score-label">Confidence</p>
+    </div>
+</div>
+
+<h3 style="margin: 25px 0 15px;"><i class="fa-solid fa-list-check"></i> Question-by-Question Feedback</h3>
+
+{% for answer in answers %}
+<div class="question-box">
+    <p class="question-tag">{{ answer.question_type|upper }}</p>
+    <p class="question-text">{{ loop.index }}. {{ answer.question_text }}</p>
+
+    <p style="font-size: 13px; color: var(--text-secondary); margin: 8px 0;"><strong style="color: var(--text-primary);">Your Answer:</strong> {{ answer.user_answer or "(No answer provided)" }}</p>
+
+    <div class="mini-scores">
+        <span>Relevance: {{ answer.relevance_score }}</span>
+        <span>Technical: {{ answer.technical_accuracy_score }}</span>
+        <span>Communication: {{ answer.communication_score }}</span>
+        <span>Completeness: {{ answer.completeness_score }}</span>
+    </div>
+
+    <p class="feedback strength"><i class="fa-solid fa-check"></i> <strong>Strengths:</strong> {{ answer.strengths }}</p>
+    <p class="feedback weakness"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Weaknesses:</strong> {{ answer.weaknesses }}</p>
+    <p class="feedback missing"><i class="fa-solid fa-lightbulb"></i> <strong>Missing Concepts:</strong> {{ answer.missing_concepts }}</p>
+</div>
+{% endfor %}
+
+<a href="{{ url_for('dashboard.dashboard_view') }}" class="btn" style="display:inline-block; width:auto; padding:11px 25px; text-decoration:none; text-align:center; margin-top:10px;"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+{% endblock %}

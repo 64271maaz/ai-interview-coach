@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block auth_content %}
+<div class="form-box">
+    <div style="text-align:center; margin-bottom: 10px;">
+        <i class="fa-solid fa-brain" style="font-size: 32px; color: var(--accent);"></i>
+    </div>
+    <h2 style="text-align:center;">Welcome Back</h2>
+    <p style="text-align:center; color: var(--text-secondary); font-size: 13px; margin-top:4px;">Login to continue your interview prep</p>
+
+    <form method="POST" action="{{ url_for('auth.login') }}">
+        <label><i class="fa-solid fa-envelope"></i> Email</label>
+        <input type="email" name="email" required>
+
+        <label><i class="fa-solid fa-lock"></i> Password</label>
+        <input type="password" name="password" required>
+
+        <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+    </form>
+    <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
+</div>
+{% endblock %}

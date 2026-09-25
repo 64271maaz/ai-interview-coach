@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}AI Interview Coach{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    {% if current_user.is_authenticated %}
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-brain"></i>
+                <span>AI Interview Coach</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('dashboard.dashboard_view') }}" class="nav-item">
+                    <i class="fa-solid fa-gauge"></i> <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('interview.select_role') }}" class="nav-item">
+                    <i class="fa-solid fa-comments"></i> <span>New Interview</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-chip">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>{{ current_user.full_name }}</span>
+                </div>
+                <a href="{{ url_for('auth.logout') }}" class="nav-item logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="flash-message"><i class="fa-solid fa-circle-info"></i> {{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% else %}
+    <div class="auth-page">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message"><i class="fa-solid fa-circle-info"></i> {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block auth_content %}{% endblock %}
+    </div>
+    {% endif %}
+
+</body>
+</html>

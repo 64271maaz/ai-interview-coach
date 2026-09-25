@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2><i class="fa-solid fa-gauge"></i> Welcome, {{ current_user.full_name }}!</h2>
+<p style="color: var(--text-secondary); margin-bottom: 20px;">Track your readiness and start a new interview.</p>
+
+<a href="{{ url_for('interview.select_role') }}" class="btn" style="display:inline-block; width:auto; padding:12px 24px; text-decoration:none; margin-bottom: 24px;">
+    <i class="fa-solid fa-plus"></i> Start New Interview
+</a>
+
+<div class="score-grid" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="score-card">
+        <p class="score-num">{{ total_attempts }}</p>
+        <p class="score-label"><i class="fa-solid fa-list-ol"></i> Total Attempts</p>
+    </div>
+    <div class="score-card">
+        <p class="score-num">{{ avg_score }}</p>
+        <p class="score-label"><i class="fa-solid fa-chart-simple"></i> Average Score</p>
+    </div>
+    <div class="score-card overall">
+        <p class="score-num">{{ best_score }}</p>
+        <p class="score-label"><i class="fa-solid fa-trophy"></i> Best Score</p>
+    </div>
+</div>
+
+{% if weak_topics %}
+<h3 style="margin: 24px 0 12px;"><i class="fa-solid fa-triangle-exclamation" style="color: var(--warning);"></i> Weak Topics (Needs Improvement)</h3>
+<div class="question-box">
+    {% for topic, score in weak_topics %}
+    <p style="margin: 8px 0; color: var(--text-primary);"><i class="fa-solid fa-circle" style="color: var(--danger); font-size: 8px;"></i> <strong>{{ topic|upper }}</strong> — Average: {{ score }}/100</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h3 style="margin: 24px 0 12px;"><i class="fa-solid fa-clock-rotate-left"></i> Previous Attempts</h3>
+
+{% if interviews %}
+    {% for interview in interviews %}
+    <div class="question-box" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <p style="font-weight: 600; font-size: 15px;">{{ interview.job_role }}</p>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-top:2px;"><i class="fa-regular fa-calendar"></i> {{ interview.date_taken.strftime('%d %b %Y') }}</p>
+        </div>
+        <div style="text-align: right;">
+            <p style="font-size: 22px; font-weight: 800; color: var(--accent);">{{ interview.overall_score }}</p>
+            <a href="{{ url_for('interview.view_report', interview_id=interview.id) }}" style="font-size: 13px; color: var(--text-secondary); text-decoration:none;">View Report <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="question-box" style="text-align:center; color: var(--text-secondary);">
+        <i class="fa-regular fa-face-smile" style="font-size: 24px; margin-bottom: 8px; display:block;"></i>
+       You haven't attempted any interview yet. Click the button above to get started!
+    </div>
+{% endif %}
+{% endblock %}
