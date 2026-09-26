@@ -5,25 +5,52 @@
 <h2><i class="fa-solid fa-briefcase"></i> Choose Your Job Role</h2>
 <p style="color: var(--text-secondary); margin-bottom: 24px;">Questions will be generated based on your selected role.</p>
 
-<div class="form-box" style="max-width: 480px; margin: 0;">
-    <form method="POST" action="{{ url_for('interview.start_interview') }}" enctype="multipart/form-data">
-        <label><i class="fa-solid fa-list"></i> Job Role</label>
-        <select name="job_role" required>
-            <option value="">-- Select a Role --</option>
-            <option value="Data Scientist">Data Scientist</option>
-            <option value="Data Analyst">Data Analyst</option>
-            <option value="AI Engineer">AI Engineer</option>
-            <option value="Machine Learning Engineer">Machine Learning Engineer</option>
-            <option value="Software Engineer">Software Engineer</option>
-            <option value="Frontend Developer">Frontend Developer</option>
-            <option value="Backend Developer">Backend Developer</option>
-        </select>
+<form method="POST" action="{{ url_for('interview.start_interview') }}" enctype="multipart/form-data" id="roleForm">
 
+    <div class="role-grid">
+        <label class="role-card">
+            <input type="radio" name="job_role" value="Data Scientist" required>
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Data Scientist</span>
+        </label>
+        <label class="role-card">
+            <input type="radio" name="job_role" value="Data Analyst">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+            <span>Data Analyst</span>
+        </label>
+        <label class="role-card">
+            <input type="radio" name="job_role" value="AI Engineer">
+            <i class="fa-solid fa-microchip"></i>
+            <span>AI Engineer</span>
+        </label>
+        <label class="role-card">
+            <input type="radio" name="job_role" value="Machine Learning Engineer">
+            <i class="fa-solid fa-robot"></i>
+            <span>Machine Learning Engineer</span>
+        </label>
+        <label class="role-card">
+            <input type="radio" name="job_role" value="Software Engineer">
+            <i class="fa-solid fa-code"></i>
+            <span>Software Engineer</span>
+        </label>
+        <label class="role-card">
+            <input type="radio" name="job_role" value="Frontend Developer">
+            <i class="fa-solid fa-display"></i>
+            <span>Frontend Developer</span>
+        </label>
+        <label class="role-card">
+            <input type="radio" name="job_role" value="Backend Developer">
+            <i class="fa-solid fa-server"></i>
+            <span>Backend Developer</span>
+        </label>
+    </div>
+
+    <div class="form-box" style="max-width: 480px; margin: 28px 0 0;">
         <label><i class="fa-solid fa-file-arrow-up"></i> Upload Resume (Optional - PDF only)</label>
         <input type="file" name="resume" accept=".pdf">
         <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px; text-align:left;">Uploading your resume will personalize the questions based on your skills.</p>
 
         <button type="submit"><i class="fa-solid fa-play"></i> Start Interview</button>
-    </form>
-</div>
+    </div>
+</form>
 {% endblock %}

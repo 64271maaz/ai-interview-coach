@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_login import LoginManager
 from config import Config
 from models.user import db, User
@@ -28,7 +28,7 @@ def create_app():
 
     @app.route('/')
     def home():
-        return '<h1>AI Interview Coach - Backend is running!</h1><a href="/login">Login</a> | <a href="/register">Register</a>'
+        return render_template('index.html')
 
     return app
 
