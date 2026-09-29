@@ -10,7 +10,7 @@
     <div class="question-box">
         <p class="question-tag">{{ answer.question_type|upper }}</p>
         <p class="question-text">{{ loop.index }}. {{ answer.question_text }}</p>
-        <textarea name="answer_{{ answer.id }}" rows="4" placeholder="Apna jawab yahan likhein..."></textarea>
+        <textarea name="answer_{{ answer.id }}" rows="4" placeholder="Type your answer here..."></textarea>
     </div>
     {% endfor %}
 
