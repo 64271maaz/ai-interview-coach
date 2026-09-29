@@ -7,50 +7,65 @@
 
 <form method="POST" action="{{ url_for('interview.start_interview') }}" enctype="multipart/form-data" id="roleForm">
 
-    <div class="role-grid">
-        <label class="role-card">
-            <input type="radio" name="job_role" value="Data Scientist" required>
-            <i class="fa-solid fa-chart-column"></i>
-            <span>Data Scientist</span>
-        </label>
-        <label class="role-card">
-            <input type="radio" name="job_role" value="Data Analyst">
-            <i class="fa-solid fa-magnifying-glass-chart"></i>
-            <span>Data Analyst</span>
-        </label>
-        <label class="role-card">
-            <input type="radio" name="job_role" value="AI Engineer">
-            <i class="fa-solid fa-microchip"></i>
-            <span>AI Engineer</span>
-        </label>
-        <label class="role-card">
-            <input type="radio" name="job_role" value="Machine Learning Engineer">
-            <i class="fa-solid fa-robot"></i>
-            <span>Machine Learning Engineer</span>
-        </label>
-        <label class="role-card">
-            <input type="radio" name="job_role" value="Software Engineer">
-            <i class="fa-solid fa-code"></i>
-            <span>Software Engineer</span>
-        </label>
-        <label class="role-card">
-            <input type="radio" name="job_role" value="Frontend Developer">
-            <i class="fa-solid fa-display"></i>
-            <span>Frontend Developer</span>
-        </label>
-        <label class="role-card">
-            <input type="radio" name="job_role" value="Backend Developer">
-            <i class="fa-solid fa-server"></i>
-            <span>Backend Developer</span>
-        </label>
-    </div>
+    <div class="role-select-layout">
+        <div class="role-grid">
+            <label class="role-card">
+                <input type="radio" name="job_role" value="Data Scientist" required>
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Data Scientist</span>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="job_role" value="Data Analyst">
+                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                <span>Data Analyst</span>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="job_role" value="AI Engineer">
+                <i class="fa-solid fa-microchip"></i>
+                <span>AI Engineer</span>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="job_role" value="Machine Learning Engineer">
+                <i class="fa-solid fa-robot"></i>
+                <span>Machine Learning Engineer</span>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="job_role" value="Software Engineer">
+                <i class="fa-solid fa-code"></i>
+                <span>Software Engineer</span>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="job_role" value="Frontend Developer">
+                <i class="fa-solid fa-display"></i>
+                <span>Frontend Developer</span>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="job_role" value="Backend Developer">
+                <i class="fa-solid fa-server"></i>
+                <span>Backend Developer</span>
+            </label>
+        </div>
 
-    <div class="form-box" style="max-width: 480px; margin: 28px 0 0;">
-        <label><i class="fa-solid fa-file-arrow-up"></i> Upload Resume (Optional - PDF only)</label>
-        <input type="file" name="resume" accept=".pdf">
-        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px; text-align:left;">Uploading your resume will personalize the questions based on your skills.</p>
+        <div class="role-sidebar">
+            <div class="form-box" style="width: 100%; margin: 0;">
+                <h2 style="font-size: 17px;"><i class="fa-solid fa-file-arrow-up"></i> Resume</h2>
+                <p style="font-size: 12px; color: var(--text-secondary); text-align:left; margin-top:4px;">Optional — PDF only</p>
 
-        <button type="submit"><i class="fa-solid fa-play"></i> Start Interview</button>
+                <input type="file" name="resume" accept=".pdf" style="margin-top: 14px;">
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px; text-align:left;">Uploading your resume will personalize the questions based on your skills.</p>
+
+                <button type="submit"><i class="fa-solid fa-play"></i> Start Interview</button>
+            </div>
+
+            <div class="tips-card">
+                <h2 style="font-size: 14px;"><i class="fa-solid fa-lightbulb"></i> Tips</h2>
+                <ul>
+                    <li>You'll get 5 questions covering technical, HR, behavioral, and problem-solving topics.</li>
+                    <li>Answer in your own words — depth matters more than length.</li>
+                    <li>Each answer is scored on relevance, accuracy, communication, and completeness.</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </form>
 {% endblock %}
