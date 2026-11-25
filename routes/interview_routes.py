@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+import io
+from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file
 from flask_login import login_required, current_user
 from models.user import db
 from models.interview import Interview, Answer
 from services.gemini_service import generate_questions
 from services.evaluation_service import evaluate_all_answers
 from services.resume_service import extract_resume_text
+from services.pdf_service import generate_report_pdf
 
 interview = Blueprint('interview', __name__)
 
@@ -150,3 +152,30 @@ def view_report(interview_id):
 
     answers = Answer.query.filter_by(interview_id=interview_id).all()
     return render_template('report.html', interview=interview_obj, answers=answers)
+
+
+@interview.route('/interview/<int:interview_id>/download')
+@login_required
+def download_report(interview_id):
+    interview_obj = Interview.query.get_or_404(interview_id)
+
+    if interview_obj.user_id != current_user.id:
+        flash('Unauthorized access.')
+        return redirect(url_for('dashboard.dashboard_view'))
+
+    if interview_obj.status != 'completed':
+        flash('Please complete the interview before downloading the report.')
+        return redirect(url_for('interview.take_interview', interview_id=interview_id))
+
+    answers = Answer.query.filter_by(interview_id=interview_id).all()
+    pdf_bytes = generate_report_pdf(interview_obj, answers, current_user.full_name)
+
+    safe_role = interview_obj.job_role.replace(' ', '_')
+    filename = f"Readiness_Report_{safe_role}_{interview_obj.date_taken.strftime('%Y%m%d')}.pdf"
+
+    return send_file(
+        io.BytesIO(pdf_bytes),
+        mimetype='application/pdf',
+        as_attachment=True,
+        download_name=filename
+    )
