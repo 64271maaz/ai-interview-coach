@@ -46,5 +46,8 @@
 </div>
 {% endfor %}
 
-<a href="{{ url_for('dashboard.dashboard_view') }}" class="btn" style="display:inline-block; width:auto; padding:11px 25px; text-decoration:none; text-align:center; margin-top:10px;"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+<div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
+    <a href="{{ url_for('interview.download_report', interview_id=interview.id) }}" class="btn" style="display:inline-block; width:auto; padding:11px 25px; text-decoration:none; text-align:center; margin-top:0;"><i class="fa-solid fa-file-pdf"></i> Download PDF Report</a>
+    <a href="{{ url_for('dashboard.dashboard_view') }}" class="btn" style="display:inline-block; width:auto; padding:11px 25px; text-decoration:none; text-align:center; margin-top:0; background:transparent; color:var(--text-primary); border:1px solid var(--border-color);"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+</div>
 {% endblock %}
