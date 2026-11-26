@@ -31,13 +31,21 @@ Most students and fresh graduates struggle to prepare effectively for job interv
 
 ## 📂 Project Structure
 ai-interview-coach/
+
 ├── app.py # Application entry point
+
 ├── config.py # Configuration (DB, secret key, API key)
+
 ├── models/ # Database models (User, Interview, Answer)
+
 ├── routes/ # Flask blueprints (auth, dashboard, interview)
+
 ├── services/ # Business logic (Gemini AI, evaluation, resume parsing)
+
 ├── templates/ # Jinja2 HTML templates
+
 ├── static/css/ # Stylesheets
+
 └── requirements.txt # Python dependencies
 
 ## 🚀 Getting Started
