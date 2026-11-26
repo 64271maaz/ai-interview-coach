@@ -37,21 +37,26 @@
 
 {% if interviews %}
     {% for interview in interviews %}
-    <div class="question-box" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="question-box" style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
         <div>
             <p style="font-weight: 600; font-size: 15px;">{{ interview.job_role }}</p>
             <p style="font-size: 13px; color: var(--text-secondary); margin-top:2px;"><i class="fa-regular fa-calendar"></i> {{ interview.date_taken.strftime('%d %b %Y') }}</p>
         </div>
         <div style="text-align: right;">
             <p style="font-size: 22px; font-weight: 800; color: var(--accent);">{{ interview.overall_score }}</p>
-            <a href="{{ url_for('interview.view_report', interview_id=interview.id) }}" style="font-size: 13px; color: var(--text-secondary); text-decoration:none;">View Report <i class="fa-solid fa-arrow-right"></i></a>
+            <div style="display:flex; gap:12px; align-items:center; justify-content:flex-end; margin-top:4px;">
+                <a href="{{ url_for('interview.view_report', interview_id=interview.id) }}" style="font-size: 13px; color: var(--text-secondary); text-decoration:none;">View Report <i class="fa-solid fa-arrow-right"></i></a>
+                <form method="POST" action="{{ url_for('interview.delete_interview', interview_id=interview.id) }}" onsubmit="return confirm('Delete this interview and its report?');" style="margin:0;">
+                    <button type="submit" class="btn-delete"><i class="fa-solid fa-trash"></i> Delete</button>
+                </form>
+            </div>
         </div>
     </div>
     {% endfor %}
 {% else %}
     <div class="question-box" style="text-align:center; color: var(--text-secondary);">
         <i class="fa-regular fa-face-smile" style="font-size: 24px; margin-bottom: 8px; display:block;"></i>
-       You haven't attempted any interview yet. Click the button above to get started!
+        You haven't attempted any interview yet. Click the button above to get started!
     </div>
 {% endif %}
 {% endblock %}
