@@ -183,3 +183,17 @@ def download_report(interview_id):
         as_attachment=True,
         download_name=filename
     )
+@interview.route('/interview/<int:interview_id>/delete', methods=['POST'])
+@login_required
+def delete_interview(interview_id):
+    interview_obj = Interview.query.get_or_404(interview_id)
+
+    if interview_obj.user_id != current_user.id:
+        flash('Unauthorized access.')
+        return redirect(url_for('dashboard.dashboard_view'))
+
+    db.session.delete(interview_obj)  # its answers are deleted too (cascade)
+    db.session.commit()
+
+    flash('Interview deleted.')
+    return redirect(url_for('dashboard.dashboard_view'))
