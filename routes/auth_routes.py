@@ -66,3 +66,49 @@ def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('auth.login'))
+@auth.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
+
+
+@auth.route('/profile/update', methods=['POST'])
+@login_required
+def update_profile():
+    full_name = request.form.get('full_name', '').strip()
+
+    if len(full_name) < 2:
+        flash('Please enter your full name (at least 2 characters).')
+        return redirect(url_for('auth.profile'))
+
+    current_user.full_name = full_name
+    db.session.commit()
+
+    flash('Profile updated successfully.')
+    return redirect(url_for('auth.profile'))
+
+
+@auth.route('/profile/password', methods=['POST'])
+@login_required
+def change_password():
+    current_password = request.form.get('current_password', '')
+    new_password = request.form.get('new_password', '')
+    confirm_password = request.form.get('confirm_password', '')
+
+    if not current_user.check_password(current_password):
+        flash('Current password is incorrect.')
+        return redirect(url_for('auth.profile'))
+
+    if len(new_password) < 6:
+        flash('New password must be at least 6 characters.')
+        return redirect(url_for('auth.profile'))
+
+    if new_password != confirm_password:
+        flash('New passwords do not match.')
+        return redirect(url_for('auth.profile'))
+
+    current_user.set_password(new_password)
+    db.session.commit()
+
+    flash('Password changed successfully.')
+    return redirect(url_for('auth.profile'))
