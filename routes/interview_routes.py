@@ -98,6 +98,10 @@ def submit_answers(interview_id):
 
     # Sab answers ko EK hi Gemini call mein evaluate karwao (quota bachane ke liye)
     results = evaluate_all_answers(interview_obj.job_role, qa_list)
+    if results is None:
+        db.session.commit()  # jawab save ho jayein
+        flash('The evaluation service is busy right now. Your answers are saved. Please click Submit again in a minute.')
+        return redirect(url_for('interview.take_interview', interview_id=interview_id))
 
     total_relevance = 0
     total_technical = 0
