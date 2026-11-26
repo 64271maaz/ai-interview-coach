@@ -324,3 +324,18 @@ h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); }
     box-shadow: 0 0 0 3px var(--accent-glow);
 }
 .question-box textarea::placeholder { color: var(--text-secondary); }
+form button.btn-delete {
+    width: auto;
+    margin: 0;
+    padding: 6px 12px;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    font-size: 12px;
+    font-weight: 600;
+}
+form button.btn-delete:hover {
+    background: rgba(248, 113, 113, 0.12);
+    box-shadow: none;
+    transform: none;
+}
