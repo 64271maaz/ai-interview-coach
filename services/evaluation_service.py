@@ -1,31 +1,25 @@
-from google import genai
-from google.genai import types
-from config import Config
-import json
-import time
-
-client = genai.Client(api_key=Config.GEMINI_API_KEY)
+from services.llm import generate_text, parse_json
 
 
 def evaluate_all_answers(job_role, qa_list):
     """
-    qa_list = [{"id": answer_id, "question": "...", "type": "...", "answer": "..."}, ...]
-    Sab answers ko EK hi Gemini call mein evaluate karta hai (quota bachane ke liye).
-    Returns: dict { answer_id: {scores + feedback} }
+    qa_list = [{"id": ..., "question": "...", "type": "...", "answer": "..."}, ...]
+    Sab answers EK hi call mein evaluate hote hain.
+    Returns: dict {answer_id: scores+feedback}, ya None agar evaluation na ho saki.
     """
-
-    # Blank answers ko seedha 0 de dein, Gemini ko unhe evaluate karne ki zaroorat nahi
-    non_blank = [qa for qa in qa_list if qa['answer'].strip() != '']
     results = {}
+    non_blank = []
 
     for qa in qa_list:
-        if qa['answer'].strip() == '':
-            results[qa['id']] = {
+        if qa["answer"].strip() == "":
+            results[qa["id"]] = {
                 "relevance_score": 0, "technical_accuracy_score": 0,
                 "communication_score": 0, "completeness_score": 0,
                 "strengths": "N/A", "weaknesses": "Answer was left blank.",
                 "missing_concepts": "A complete answer was expected but not provided."
             }
+        else:
+            non_blank.append(qa)
 
     if not non_blank:
         return results
@@ -36,7 +30,9 @@ def evaluate_all_answers(job_role, qa_list):
 
     prompt = f"""You are an expert interview evaluator for the role of "{job_role}".
 
-Evaluate EACH of the following question-answer pairs. For each, score 0-100 on: relevance, technical accuracy (or logical soundness if non-technical), communication clarity, and completeness. Also give brief strengths, weaknesses, and missing_concepts.
+Evaluate EACH of the following question-answer pairs. For each, score 0-100 on: relevance, technical accuracy (or logical soundness if non-technical), communication clarity, and completeness.
+Be strict and honest: a vague, off-topic, or "no idea" answer must get a low score (under 20), and only detailed, correct answers should score above 80.
+Also give brief strengths, weaknesses, and missing_concepts.
 {items_text}
 Return ONLY a valid JSON array, no markdown, in this exact format:
 [
@@ -44,37 +40,17 @@ Return ONLY a valid JSON array, no markdown, in this exact format:
 ]
 """
 
-    for attempt in range(3):
+    raw = generate_text(prompt, temperature=0.3, json_mode=True)
+    if raw:
         try:
-            response = client.models.generate_content(
-                model='gemini-3.8-flash',
-                contents=prompt,
-                config=types.GenerateContentConfig(temperature=0.3),
-            )
-            raw_text = response.text.strip()
-            if raw_text.startswith('```'):
-                raw_text = raw_text.split('```')[1]
-                if raw_text.startswith('json'):
-                    raw_text = raw_text[4:]
-
-            parsed = json.loads(raw_text.strip())
+            parsed = parse_json(raw)
             for item in parsed:
-                results[item['id']] = item
-            return results
-
+                results[int(item["id"])] = item
+            if all(qa["id"] in results for qa in non_blank):
+                return results
+            print("Evaluation incomplete: some answers missing in AI response")
         except Exception as e:
-            print(f"Evaluation attempt {attempt + 1} failed: {e}")
-            if attempt < 2:
-                time.sleep(5)
-            continue
+            print("Evaluation JSON parse error:", e)
 
-    # Fallback agar sab attempts fail ho jayein
-    for qa in non_blank:
-        results[qa['id']] = {
-            "relevance_score": 50, "technical_accuracy_score": 50,
-            "communication_score": 50, "completeness_score": 50,
-            "strengths": "Could not evaluate (quota/server issue).",
-            "weaknesses": "Evaluation service temporarily unavailable.",
-            "missing_concepts": "N/A"
-        }
-    return results
+    # Fake 50 scores nahi: caller ko batao ke evaluation nahi hui
+    return None
