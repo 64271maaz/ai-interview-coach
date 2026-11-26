@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2><i class="fa-solid fa-user"></i> My Profile</h2>
+<p style="color: var(--text-secondary); margin-bottom: 24px;">Manage your account details and password.</p>
+
+<div class="profile-layout">
+    <div class="form-box">
+        <h2 style="font-size: 17px;"><i class="fa-solid fa-id-card"></i> Account Details</h2>
+        <form method="POST" action="{{ url_for('auth.update_profile') }}">
+            <label>Full Name</label>
+            <input type="text" name="full_name" value="{{ current_user.full_name }}" required minlength="2">
+
+            <label>Email</label>
+            <input type="email" value="{{ current_user.email }}" disabled>
+
+            {% if current_user.created_at %}
+            <label>Member Since</label>
+            <input type="text" value="{{ current_user.created_at.strftime('%d %b %Y') }}" disabled>
+            {% endif %}
+
+            <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+        </form>
+    </div>
+
+    <div class="form-box">
+        <h2 style="font-size: 17px;"><i class="fa-solid fa-lock"></i> Change Password</h2>
+        <form method="POST" action="{{ url_for('auth.change_password') }}">
+            <label>Current Password</label>
+            <input type="password" name="current_password" required>
+
+            <label>New Password</label>
+            <input type="password" name="new_password" required minlength="6">
+
+            <label>Confirm New Password</label>
+            <input type="password" name="confirm_password" required minlength="6">
+
+            <button type="submit"><i class="fa-solid fa-key"></i> Update Password</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
