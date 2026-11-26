@@ -305,3 +305,22 @@ h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); }
 .role-card:has(input:checked) span {
     color: #0f1420;
 }
+.question-box textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+}
+.question-box textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.question-box textarea::placeholder { color: var(--text-secondary); }
